@@ -1,42 +1,21 @@
 import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_glossary/root.dart';
-import 'package:flutter_glossary/ui/pages/new_page.dart';
-import 'package:flutter_glossary/ui/pages/wrap_page.dart';
 import 'package:flutter_glossary/ui/widgets/shimmer_item_loading.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_glossary/ui/pages/new_page.dart';
+import 'package:flutter_glossary/ui/pages/wrap_page.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Root(),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class ListViewPage extends StatefulWidget {
+  ListViewPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ListViewPageState createState() => _ListViewPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  // QuickActions quickActions = QuickActions();
+class _ListViewPageState extends State<ListViewPage> {
   final QuickActions quickActions = QuickActions();
 
   _navigate(Widget screen) {
@@ -95,23 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: FutureBuilder(
         future: getAllTodos(),
         builder: (context, snapshot) {
+          
           // WHILE THE CALL IS BEING MADE LOADING
           if (ConnectionState.active != null && !snapshot.hasData) {
             // return Center(child: CircularProgressIndicator());
             return ShimmerItemLoading();
           }
-
-          // connectionState:ConnectionState (ConnectionState.waiting)
-          // data:null
-          // error:null
-          // hasData:false
-          // hasError:false
 
           // WHEN THE CALL IS DONE BUT HAPPENS TO HAVE AN ERROR
           if (ConnectionState.done != null && snapshot.hasError) {
